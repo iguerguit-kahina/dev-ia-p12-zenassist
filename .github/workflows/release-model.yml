@@ -1,6 +1,10 @@
 # Nom du workflow, affiché dans l'onglet "Actions" de GitHub
 name: Export et publication du modèle ML
 
+# Autorise le workflow à modifier des releases (ajouter des fichiers)
+permissions:
+  contents: write
+
 # Quand ce workflow se déclenche
 on:
   release:
