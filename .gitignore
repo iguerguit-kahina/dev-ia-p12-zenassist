@@ -1,3 +1,6 @@
 node_modules
 .next
 .env.local
+ml/model.pkl
+ml/metrics.json
+__pycache__/

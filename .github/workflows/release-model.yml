@@ -1,0 +1,45 @@
+# Nom du workflow, affiché dans l'onglet "Actions" de GitHub
+name: Export et publication du modèle ML
+
+# Quand ce workflow se déclenche
+on:
+  release:
+    types: [published]   # se lance automatiquement quand tu publies une release sur GitHub
+  workflow_dispatch:      # permet aussi de le lancer manuellement, depuis l'onglet "Actions",
+                           # utile pour tester/déboguer sans avoir à créer une vraie release à chaque fois
+
+# La liste des tâches ("jobs") à exécuter
+jobs:
+  export-model:                # nom interne de ce job
+    runs-on: ubuntu-latest      # GitHub nous prête une machine virtuelle Linux pour faire tourner tout ça
+
+    # Les étapes exécutées les unes après les autres, dans l'ordre
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4   # télécharge le contenu de ton repo GitHub sur cette machine virtuelle
+                                     # (sans ça, la machine ne verrait ni ton dataset ni tes scripts)
+
+      - name: Installation de Python
+        uses: actions/setup-python@v5   # installe Python sur la machine virtuelle
+        with:
+          python-version: "3.11"        # version de Python à utiliser
+
+      - name: Installation des dépendances
+        run: pip install -r ml/requirements.txt
+        # installe pandas et scikit-learn, listés dans ton fichier requirements.txt,
+        # car la machine virtuelle est vierge au départ, rien n'est préinstallé
+
+      - name: Entraînement et export du modèle
+        working-directory: ml           # se place dans le dossier ml/ avant de lancer la commande
+        run: python train_and_export.py
+        # relance exactement le même script que tu as testé en local :
+        # il entraîne la régression logistique et génère model.pkl + metrics.json
+
+      - name: Publication des fichiers sur la release
+        uses: softprops/action-gh-release@v2   # l'action GitHub trouvée dans la consigne
+        with:
+          files: |
+            ml/model.pkl
+            ml/metrics.json
+        # attache ces deux fichiers générés à la release qui a déclenché le workflow,
+        # pour qu'ils soient téléchargeables directement depuis la page GitHub de cette release
