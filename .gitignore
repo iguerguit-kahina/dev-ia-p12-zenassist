@@ -1,6 +1,6 @@
 node_modules
 .next
-.env.local   # contient ta clé API secrète (Mistral) — JAMAIS suivi par git, pour ne pas la divulguer
-ml/model.pkl   #le modèle entraîné, généré automatiquement par train_and_export.py
-ml/metrics.json   #
+.env.local
+ml/model.pkl
+ml/metrics.json
 __pycache__/
