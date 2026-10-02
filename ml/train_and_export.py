@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split         # pour séparer ent
 from sklearn.preprocessing import LabelEncoder                # transforme les catégories (texte) en nombres
 
 # Chemins des fichiers : où on lit les données, où on écrit les résultats
-CHEMIN_DATASET = "data/dataset_clean.csv.gz"
+CHEMIN_DATASET = "data/dataset_clean.csv.gz" # LE CSV ALLEGE
 CHEMIN_MODELE = "model.pkl"
 CHEMIN_METRIQUES = "metrics.json"
 
@@ -59,12 +59,13 @@ print(f"F1-score (pondéré) : {f1:.3f}")
 # On regroupe modèle + vectorizer + label_encoder ensemble : les 3 sont indispensables
 # pour pouvoir refaire une prédiction plus tard (sans eux, le modèle seul ne sert à rien)
 bundle = {
-    "model": model,
-    "vectorizer": vectorizer,
-    "label_encoder": label_encoder,
+    "model": model,     # le modèle entraîné
+    "vectorizer": vectorizer,  # l'outil qui transforme le texte en nombres
+    "label_encoder": label_encoder, # l'outil qui transforme les catégories en nombres
 }
+
 with open(CHEMIN_MODELE, "wb") as f:  # "wb" = écriture en mode binaire (obligatoire pour pickle)
-    pickle.dump(bundle, f)
+    pickle.dump(bundle, f) # les mettres dans le fichier pikles.dump
 print(f"Modèle exporté : {CHEMIN_MODELE}")
 
 # --- Export des métriques ---
